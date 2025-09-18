@@ -1,0 +1,77 @@
+# -------------------
+# Fizz Deployment
+# -------------------
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: fizz-deployment
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: fizz
+  template:
+    metadata:
+      labels:
+        app: fizz
+    spec:
+      containers:
+        - name: fizz
+          image: cesaratteh/fizz-service:latest
+          ports:
+            - containerPort: 8080
+
+---
+# -------------------
+# Buzz Deployment
+# -------------------
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: buzz-deployment
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: buzz
+  template:
+    metadata:
+      labels:
+        app: buzz
+    spec:
+      containers:
+        - name: buzz
+          image: cesaratteh/buzz-service:latest
+          ports:
+            - containerPort: 8080
+
+---
+# -------------------
+# Services
+# -------------------
+apiVersion: v1
+kind: Service
+metadata:
+  name: fizz-service
+spec:
+  selector:
+    app: fizz
+  ports:
+    - protocol: TCP
+      port: 8080
+      targetPort: 8080
+  type: NodePort
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: buzz-service
+spec:
+  selector:
+    app: buzz
+  ports:
+    - protocol: TCP
+      port: 8080
+      targetPort: 8080
+  type: NodePort
